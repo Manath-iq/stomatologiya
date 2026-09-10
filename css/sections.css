@@ -876,13 +876,19 @@
   margin-left: -1px;
   background: var(--surface);
   pointer-events: none;
-  display: grid;
-  place-items: center;
 }
+/* кружок центрируем абсолютно: внутри полоски в 2px
+   grid-выравнивание уводит переполняющий элемент к краю */
 .ba__handle svg {
-  width: 18px; height: 18px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  max-width: none;          /* иначе ширину режет полоска в 2px */
   padding: var(--s-100);
   box-sizing: content-box;
+  transform: translate(-50%, -50%);
   background: var(--surface);
   border-radius: var(--r-full);
   color: var(--ink);
