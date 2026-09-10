@@ -263,3 +263,24 @@ button, input, select, textarea {
   }
   [data-reveal] { opacity: 1; transform: none; filter: none; }
 }
+
+/* --- Появление первого экрана ---------------------------- */
+
+.hero-in [data-in] {
+  opacity: 0;
+  transform: translateY(var(--s-300));
+  filter: blur(8px);
+}
+.hero-in.is-ready [data-in] {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+  transition: opacity 1000ms var(--ease), transform 1000ms var(--ease), filter 1000ms var(--ease);
+  transition-delay: var(--in-delay, 0ms);
+}
+.hero-in [data-in="media"] { transform: translateY(var(--s-500)) scale(0.98); }
+.hero-in [data-in="pill"]  { transform: translateY(var(--s-100)) scale(0.94); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-in [data-in] { opacity: 1; transform: none; filter: none; }
+}

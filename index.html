@@ -77,22 +77,22 @@
 <!-- ============ HERO ============ -->
 <section class="hero">
   <div class="shell">
-    <div class="hero__slab dark-slab">
+    <div class="hero__slab dark-slab hero-in" id="hero-slab">
 
       <div class="hero__copy">
-        <span class="eyebrow"><span class="pill__dot"></span>Имплантация и эстетическая стоматология · Казань</span>
+        <span class="eyebrow" data-in style="--in-delay:80ms"><span class="pill__dot"></span>Имплантация и эстетическая стоматология · Казань</span>
 
-        <h1 class="hero__title">
+        <h1 class="hero__title" data-in style="--in-delay:160ms">
           <span class="grad">Зубы, которые</span><br>
           <span class="grad grad--soft">не придётся стесняться</span>
         </h1>
 
-        <p class="hero__lead">
+        <p class="hero__lead" data-in style="--in-delay:300ms">
           Ставим импланты по цифровому протоколу: план в 3D до операции,
           хирургический шаблон вместо разрезов, временная коронка в день установки.
         </p>
 
-        <div class="hero__actions">
+        <div class="hero__actions" data-in style="--in-delay:400ms">
           <a class="btn btn--lime" href="#booking">
             Записаться на консультацию
             <svg aria-hidden="true" viewBox="0 0 24 24"><use href="#i-arrow-ur"/></svg>
@@ -100,7 +100,7 @@
           <a class="btn btn--ghost" href="#cases">Смотреть кейсы</a>
         </div>
 
-        <dl class="hero__stats">
+        <dl class="hero__stats" data-in style="--in-delay:500ms">
           <div><dt>лет клинике</dt><dd class="num" data-count="17">17</dd></div>
           <div><dt>пациентов</dt><dd class="num" data-count="4260" data-suffix="+">4 260</dd></div>
           <div><dt>имплантов установлено</dt><dd class="num" data-count="1847">1 847</dd></div>
@@ -108,18 +108,18 @@
       </div>
 
       <div class="hero__media">
-        <img src="img/gen/hero-doctor.webp" width="1024" height="1536"
+        <img data-in="media" style="--in-delay:220ms" src="img/gen/hero-doctor.webp" width="1024" height="1536"
              alt="Ильдар Зарипов, челюстно-лицевой хирург и имплантолог клиники DENTIS" fetchpriority="high">
 
-        <span class="pill hero__pill hero__pill--1">
+        <span class="pill hero__pill hero__pill--1" data-in="pill" style="--in-delay:760ms">
           <svg aria-hidden="true" viewBox="0 0 24 24"><use href="#i-shield"/></svg>
           Пожизненная гарантия на импланты
         </span>
-        <span class="pill hero__pill hero__pill--2">
+        <span class="pill hero__pill hero__pill--2" data-in="pill" style="--in-delay:880ms">
           <span class="pill__dot"></span>
           Сегодня свободно 3 окна
         </span>
-        <span class="pill hero__pill hero__pill--3">
+        <span class="pill hero__pill hero__pill--3" data-in="pill" style="--in-delay:1000ms">
           <svg aria-hidden="true" viewBox="0 0 24 24"><use href="#i-tooth"/></svg>
           КТ и план лечения — 0 ₽
         </span>
@@ -945,6 +945,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" defer></script>
+<script src="js/hero-in.js" defer></script>
 <script src="js/nav.js" defer></script>
 <script src="js/reveal.js" defer></script>
 <script src="js/counters.js" defer></script>
