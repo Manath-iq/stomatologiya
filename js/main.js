@@ -7,9 +7,10 @@
   let lenis = null;
   if (!reduce && typeof window.Lenis !== 'undefined') {
     lenis = new window.Lenis({
-      duration: 1.1,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      lerp: 0.16,           /* догоняем колесо почти сразу, без «резинового» хвоста */
+      wheelMultiplier: 1.1,
       smoothWheel: true,
+      syncTouch: false,     /* на тач-экранах остаётся нативная прокрутка */
     });
     window.lenis = lenis;
 
@@ -29,7 +30,7 @@
     const node = document.querySelector(id);
     if (!node) return;
     e.preventDefault();
-    if (lenis) lenis.scrollTo(node, { offset: -96 });
+    if (lenis) lenis.scrollTo(node, { offset: -96, duration: 0.9 });
     else node.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
   });
 

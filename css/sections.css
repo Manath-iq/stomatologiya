@@ -171,18 +171,18 @@
 
 /* ---------- HERO ---------------------------------------- */
 
-.hero { padding-top: 104px; }
-@media (max-width: 1100px) { .hero { padding-top: 96px; } }
+.hero { padding-top: 88px; }
+@media (max-width: 1100px) { .hero { padding-top: 84px; } }
 
 .hero__slab {
   position: relative;
   overflow: hidden;
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-  align-items: end;
+  align-items: stretch;
   gap: var(--s-400);
-  min-height: min(78vh, 720px);
-  padding: var(--s-600);
+  min-height: min(82vh, 760px);
+  padding: var(--s-600) var(--s-600) 0;
   background:
     radial-gradient(120% 90% at 78% 100%, #3a3d33 0%, transparent 58%),
     var(--ink);
@@ -194,9 +194,10 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
   gap: var(--s-300);
   max-width: var(--measure);
-  padding-block: var(--s-400);
+  padding-block: var(--s-300) var(--s-600);
 }
 
 .hero__title {
@@ -247,13 +248,22 @@
 
 .hero__media {
   position: relative;
-  align-self: end;
+  align-self: stretch;
   justify-self: center;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
   width: 100%;
   max-width: 520px;
+  min-height: 0;
 }
 .hero__media img {
-  width: 100%;
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
   filter: drop-shadow(0 40px 60px rgba(0, 0, 0, 0.45));
 }
 
@@ -270,7 +280,13 @@
     gap: var(--s-300);
   }
   .hero__copy { padding-block: var(--s-200) 0; }
-  .hero__media { max-width: 420px; margin-inline: auto; }
+  .hero__media {
+    align-self: auto;
+    height: auto;
+    max-width: 420px;
+    margin-inline: auto;
+  }
+  .hero__media img { width: 100%; height: auto; max-height: none; }
   .hero__pill--1 { top: 4%;  left: 0; }
   .hero__pill--2 { top: 40%; right: 0; }
   .hero__pill--3 { left: auto; right: 0; bottom: 14%; }
@@ -331,7 +347,7 @@
   font-size: clamp(var(--t-3xl), 4.6vw, var(--t-5xl));
   line-height: 1.06;
 }
-.problems__head .eyebrow { grid-row: 1; justify-self: start; align-self: start; }
+.problems__head .eyebrow { grid-row: 1; grid-column: 1; justify-self: start; align-self: start; }
 .problems__nav { grid-row: 1; grid-column: 3; justify-self: end; align-self: start; display: flex; gap: var(--s-75); }
 
 @media (max-width: 900px) {
@@ -342,7 +358,7 @@
 
 .fan {
   position: relative;
-  height: 620px;
+  height: 700px;
   margin-top: var(--s-600);
   cursor: grab;
   touch-action: pan-y;
@@ -354,9 +370,9 @@
   position: absolute;
   top: var(--s-500);
   left: 50%;
-  width: 300px;
-  height: 420px;
-  margin-left: -150px;
+  width: 360px;
+  height: 500px;
+  margin-left: -180px;
   border-radius: var(--r-3xl);
   overflow: hidden;
   background: var(--surface-2);
@@ -421,9 +437,14 @@
 }
 .fan__card.is-active .fan__note { opacity: 1; transform: none; }
 
-@media (max-width: 700px) {
+@media (max-width: 900px) {
+  .fan { height: 600px; }
+  .fan__card { width: 300px; height: 420px; margin-left: -150px; }
+}
+@media (max-width: 620px) {
   .fan { height: 500px; }
-  .fan__card { width: 240px; height: 340px; margin-left: -120px; }
+  .fan__card { width: 250px; height: 350px; margin-left: -125px; }
+  .fan__note { inset: auto var(--s-200) var(--s-200); font-size: var(--t-xs); line-height: var(--lh-xs); }
 }
 
 /* ---------- TAGLINE ------------------------------------- */
@@ -830,7 +851,7 @@
   width: var(--pos, 50%);
   overflow: hidden;
 }
-.ba__before img { max-width: none; height: 100%; }
+.ba__before img { max-width: none; height: 100%; object-fit: cover; object-position: center; }
 
 .ba__range {
   position: absolute;
@@ -919,7 +940,7 @@
   box-shadow: var(--shadow-card);
 }
 .revorbit__face--1 { top: 12%;  left: 13%; }
-.revorbit__face--2 { top: 2%;   left: 30%; width: 52px; height: 52px; }
+.revorbit__face--2 { top: 1%;   left: 26%; width: 52px; height: 52px; }
 .revorbit__face--3 { top: 4%;   right: 26%; width: 56px; height: 56px; }
 .revorbit__face--4 { top: 36%;  right: 5%;  width: 60px; height: 60px; }
 

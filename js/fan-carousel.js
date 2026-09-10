@@ -1,17 +1,33 @@
-/* Веерная карусель: карточки идут по дуге и разворачиваются к центру */
+/* Веерная карусель: карточки идут по дуге и повторяются по кругу без конца */
 (function () {
   const root = document.getElementById('fan');
   if (!root) return;
 
-  const cards = Array.from(root.querySelectorAll('.fan__card'));
-  if (!cards.length) return;
+  const list = root.querySelector('.fan__list');
+  const originals = Array.from(root.querySelectorAll('.fan__card'));
+  if (!originals.length) return;
 
-  const wide = () => window.innerWidth > 700;
-  let STEP = wide() ? 208 : 150;   // расстояние между центрами карточек
-  const MAX = () => (cards.length - 1) * STEP;
+  /* дублируем набор, пока карточек не хватит на полный круг:
+     так место, где лента смыкается, всегда остаётся за кадром */
+  const MIN_CARDS = 12;
+  while (list.children.length < MIN_CARDS) {
+    originals.forEach((card) => {
+      const clone = card.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      clone.querySelectorAll('a').forEach((a) => a.setAttribute('tabindex', '-1'));
+      list.append(clone);
+    });
+  }
 
-  let offset = 0;        // текущее положение ленты
-  let target = 0;        // куда едем
+  const cards = Array.from(list.children);
+  const wide = () => window.innerWidth > 900;
+  const mid = () => window.innerWidth > 620;
+
+  let STEP = wide() ? 250 : mid() ? 200 : 160;
+  const span = () => cards.length * STEP;
+
+  let offset = 0;
+  let target = 0;
   let dragging = false;
   let pointerId = null;
   let startX = 0;
@@ -22,27 +38,35 @@
 
   const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
 
+  /* расстояние до центра с заворотом по кругу */
+  function wrap(delta) {
+    const total = span();
+    const half = total / 2;
+    return ((delta + half) % total + total) % total - half;
+  }
+
   function layout() {
     cards.forEach((card, i) => {
-      const t = (i * STEP - offset) / STEP;   // расстояние от центра в шагах
+      const t = wrap(i * STEP - offset) / STEP;
       const abs = Math.abs(t);
       const rot = clamp(t * 7, -34, 34);
       const lift = Math.pow(abs, 1.7) * 22;
       const scale = Math.max(1 - abs * 0.055, 0.7);
-      const fade = abs > 3.4 ? 0 : 1;
+      const fade = abs > 3.2 ? 0 : abs > 2.5 ? (3.2 - abs) / 0.7 : 1;
 
       card.style.transform =
         'translate3d(' + (t * STEP * 0.86) + 'px,' + lift + 'px,0) rotate(' + rot + 'deg) scale(' + scale + ')';
       card.style.zIndex = String(100 - Math.round(abs * 10));
       card.style.opacity = String(fade);
+      card.style.pointerEvents = fade < 0.4 ? 'none' : '';
       card.classList.toggle('is-active', abs < 0.5);
     });
   }
 
   function tick() {
     const diff = target - offset;
-    offset += diff * 0.12;
-    if (Math.abs(diff) < 0.4) { offset = target; raf = null; layout(); updateButtons(); return; }
+    offset += diff * 0.14;
+    if (Math.abs(diff) < 0.4) { offset = target; raf = null; layout(); return; }
     layout();
     raf = requestAnimationFrame(tick);
   }
@@ -51,21 +75,18 @@
     if (!raf) raf = requestAnimationFrame(tick);
   }
 
-  function goTo(index) {
-    target = clamp(index * STEP, 0, MAX());
+  function step(dir) {
+    target = Math.round(target / STEP) * STEP + dir * STEP;
     animate();
   }
 
   function snap() {
     const projected = offset - velocity * 6;
-    goTo(Math.round(projected / STEP));
+    target = Math.round(projected / STEP) * STEP;
+    animate();
   }
 
-  function currentIndex() {
-    return Math.round(target / STEP);
-  }
-
-  /* --- указатель --------------------------------------- */
+  /* --- перетаскивание ---------------------------------- */
   root.addEventListener('pointerdown', (e) => {
     if (e.target.closest('a')) return;
     dragging = true;
@@ -81,7 +102,7 @@
     if (!dragging) return;
     velocity = e.clientX - lastX;
     lastX = e.clientX;
-    offset = clamp(startOffset - (e.clientX - startX), -STEP * 0.5, MAX() + STEP * 0.5);
+    offset = startOffset - (e.clientX - startX);
     target = offset;
     layout();
   });
@@ -99,21 +120,12 @@
   root.addEventListener('pointercancel', endDrag);
 
   /* --- кнопки и клавиатура ----------------------------- */
-  const prev = document.querySelector('[data-fan="prev"]');
-  const next = document.querySelector('[data-fan="next"]');
-
-  function updateButtons() {
-    const i = currentIndex();
-    if (prev) prev.disabled = i <= 0;
-    if (next) next.disabled = i >= cards.length - 1;
-  }
-
-  prev?.addEventListener('click', () => goTo(currentIndex() - 1));
-  next?.addEventListener('click', () => goTo(currentIndex() + 1));
+  document.querySelector('[data-fan="prev"]')?.addEventListener('click', () => step(-1));
+  document.querySelector('[data-fan="next"]')?.addEventListener('click', () => step(1));
 
   root.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft')  { e.preventDefault(); goTo(currentIndex() - 1); }
-    if (e.key === 'ArrowRight') { e.preventDefault(); goTo(currentIndex() + 1); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); step(-1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
   });
 
   /* --- ресайз ------------------------------------------ */
@@ -121,15 +133,12 @@
   window.addEventListener('resize', () => {
     clearTimeout(rt);
     rt = setTimeout(() => {
-      const i = currentIndex();
-      STEP = wide() ? 208 : 150;
-      offset = target = clamp(i * STEP, 0, MAX());
+      const index = Math.round(target / STEP);
+      STEP = wide() ? 250 : mid() ? 200 : 160;
+      offset = target = index * STEP;
       layout();
     }, 150);
   });
 
-  /* стартуем с середины, чтобы веер был симметричным */
-  offset = target = Math.round((cards.length - 1) / 2) * STEP;
   layout();
-  updateButtons();
 })();

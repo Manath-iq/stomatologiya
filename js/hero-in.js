@@ -14,8 +14,10 @@
     }));
   }
 
-  /* сколько бы ни грузилось, экран показываем не позже секунды */
-  Promise.race([Promise.all(waits), new Promise((r) => setTimeout(r, 1000))]).then(() => {
-    requestAnimationFrame(ready);
-  });
+  /* сколько бы ни грузилось, экран показываем не позже секунды.
+     rAF здесь не используем: в фоновой вкладке он заморожен,
+     и первый экран остался бы пустым до переключения на неё */
+  Promise.race([Promise.all(waits), new Promise((r) => setTimeout(r, 1000))])
+    .then(ready)
+    .catch(ready);
 })();
