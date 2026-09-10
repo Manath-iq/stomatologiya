@@ -50,7 +50,7 @@
       const t = wrap(i * STEP - offset) / STEP;
       const abs = Math.abs(t);
       const rot = clamp(t * 7, -34, 34);
-      const lift = Math.pow(abs, 1.7) * 22;
+      const lift = Math.pow(abs, 1.6) * 18;
       const scale = Math.max(1 - abs * 0.055, 0.7);
       const fade = abs > 3.2 ? 0 : abs > 2.5 ? (3.2 - abs) / 0.7 : 1;
 

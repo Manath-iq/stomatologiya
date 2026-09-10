@@ -358,7 +358,7 @@
 
 .fan {
   position: relative;
-  height: 700px;
+  height: 780px;
   margin-top: var(--s-600);
   cursor: grab;
   touch-action: pan-y;
@@ -438,11 +438,11 @@
 .fan__card.is-active .fan__note { opacity: 1; transform: none; }
 
 @media (max-width: 900px) {
-  .fan { height: 600px; }
+  .fan { height: 660px; }
   .fan__card { width: 300px; height: 420px; margin-left: -150px; }
 }
 @media (max-width: 620px) {
-  .fan { height: 500px; }
+  .fan { height: 580px; }
   .fan__card { width: 250px; height: 350px; margin-left: -125px; }
   .fan__note { inset: auto var(--s-200) var(--s-200); font-size: var(--t-xs); line-height: var(--lh-xs); }
 }
